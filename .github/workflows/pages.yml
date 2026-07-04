@@ -34,8 +34,10 @@ jobs:
           fi
       - name: Install dependencies
         run: npm install
-      - name: Generate production passcode config
+      - name: Generate test passcode config
         run: npm run generate:passcode
+        env:
+          SITE_PASSCODE: test-passcode-for-ci-only
       - name: Check for committed secrets and unsafe patterns
         run: npm run check:no-secrets
       - name: Validate question bank
@@ -46,6 +48,8 @@ jobs:
         run: npm run lint
       - name: Unit and component tests
         run: npm run test
+      - name: Generate production passcode config
+        run: npm run generate:passcode
       - name: Build
         run: npm run build
       - name: Install Playwright browsers
