@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Spanish MTEL Coach">
+  <rect width="64" height="64" rx="14" fill="#2f6f73"/>
+  <path d="M15 43c8-13 22-18 34-14" fill="none" stroke="#f5c46b" stroke-width="5" stroke-linecap="round"/>
+  <path d="M18 22h28M18 31h18" stroke="#fff8eb" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="47" cy="42" r="5" fill="#d95842"/>
+</svg>

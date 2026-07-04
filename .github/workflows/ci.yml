@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      SITE_PASSCODE: test-passcode-for-ci-only
+      VITE_BASE_PATH: /spanish-mtel-coach/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Generate test passcode config
+        run: npm run generate:passcode
+      - name: Check for committed secrets and unsafe patterns
+        run: npm run check:no-secrets
+      - name: Validate question bank
+        run: npm run validate:questions
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit and component tests
+        run: npm run test
+      - name: Build
+        run: npm run build
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-failure-artifacts
+          path: |
+            coverage
+            test-results
+            playwright-report
+          if-no-files-found: ignore
