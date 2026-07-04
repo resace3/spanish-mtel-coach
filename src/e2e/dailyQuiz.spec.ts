@@ -20,6 +20,10 @@ async function answerCurrent(page: import('@playwright/test').Page): Promise<voi
   await page.getByRole('button', { name: 'Submit answer' }).click();
 }
 
+async function navTo(page: import('@playwright/test').Page, name: string): Promise<void> {
+  await page.locator('.nav-shell').getByRole('link', { name, exact: true }).click();
+}
+
 test('complete daily set, persist streak, use extra practice, export, clear, and import', async ({ page }) => {
   await unlock(page);
   await page.getByRole('link', { name: /start today's 10/i }).click();
@@ -31,19 +35,19 @@ test('complete daily set, persist streak, use extra practice, export, clear, and
   }
 
   await expect(page.getByText(/All 10 questions are submitted/i)).toBeVisible();
-  await page.getByRole('link', { name: 'Dashboard' }).click();
+  await page.locator('.complete-screen').getByRole('link', { name: 'Dashboard', exact: true }).click();
   await expect(page.locator('.stat-card').filter({ hasText: 'Current streak' })).toContainText('1');
   await page.reload();
   await expect(page.locator('.stat-card').filter({ hasText: 'Current streak' })).toContainText('1');
 
-  await page.getByRole('link', { name: 'Practice' }).click();
+  await navTo(page, 'Practice');
   await page.getByLabel('Question count').selectOption('5');
   await page.getByRole('button', { name: 'Start practice' }).click();
   await answerCurrent(page);
-  await page.getByRole('link', { name: 'Dashboard' }).click();
+  await navTo(page, 'Dashboard');
   await expect(page.locator('.stat-card').filter({ hasText: 'Today' })).toContainText('Complete');
 
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await navTo(page, 'Settings');
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export progress' }).click();
   const download = await downloadPromise;
@@ -54,6 +58,6 @@ test('complete daily set, persist streak, use extra practice, export, clear, and
   await page.getByRole('button', { name: 'Clear local data' }).click();
   await page.setInputFiles('input[type="file"]', path!);
   await page.getByRole('button', { name: 'Import progress' }).click();
-  await page.getByRole('link', { name: 'Dashboard' }).click();
+  await navTo(page, 'Dashboard');
   await expect(page.locator('.stat-card').filter({ hasText: 'Current streak' })).toContainText('1');
 });
