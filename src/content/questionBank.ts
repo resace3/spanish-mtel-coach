@@ -3,10 +3,9 @@ import { grammarQuestionSeeds, type GrammarSeed } from './grammarTemplates';
 import { listeningPromptSeeds } from './listeningPrompts';
 import { oralPromptFamilies } from './oralPrompts';
 import type { Choice, Question, SkillArea } from './questionTypes';
-import { standardRubric } from './questionTypes';
 import { readingPassageSeeds } from './readingPassages';
 import { writingPromptFamilies } from './writingPrompts';
-import { buildPromptVariants } from '../engine/templateGenerator';
+import { buildPromptVariants, type GeneratedPromptSeed } from '../engine/templateGenerator';
 
 function choicesFrom(labels: string[]): Choice[] {
   return labels.map((text, index) => ({ id: String.fromCharCode(65 + index), text }));
@@ -27,6 +26,56 @@ function objectiveQuestionFromSeed(seed: GrammarSeed, skillArea: SkillArea, idPr
     tags: seed.tags,
     estimatedSeconds: skillArea === 'culture' ? 75 : 60,
     source: 'original_static',
+    safetyReviewed: true,
+  };
+}
+
+function writingChoiceQuestion(seed: GeneratedPromptSeed): Question {
+  const choices = choicesFrom([
+    'Address the exact task, organize ideas with clear transitions, include specific details, and use an appropriate Spanish register.',
+    'List several isolated vocabulary words and leave the reader to infer the message.',
+    'Write mostly in English and add a Spanish greeting and closing.',
+    'Focus on an unrelated personal story without answering the assigned situation.',
+  ]);
+  return {
+    id: seed.id,
+    skillArea: 'writing',
+    objectiveCode: seed.objectiveCode,
+    difficulty: seed.difficulty,
+    promptLanguage: 'mixed',
+    promptText: `Multiple choice only: Which plan would produce the strongest written Spanish response? ${seed.promptText}`,
+    choices,
+    correctAnswer: choices[0].id,
+    explanationText:
+      'A strong written response must directly answer the task, stay organized, include relevant detail, and use Spanish appropriate to the audience.',
+    tags: [...seed.tags, 'multiple-choice-writing'],
+    estimatedSeconds: 75,
+    source: 'original_template',
+    safetyReviewed: true,
+  };
+}
+
+function oralChoiceQuestion(seed: GeneratedPromptSeed): Question {
+  const choices = choicesFrom([
+    'State the purpose first, speak in complete Spanish sentences, include the required details, use a fitting register, and close clearly.',
+    'Use memorized phrases that sound fluent but do not answer the situation.',
+    'Give a one-word answer and rely on tone instead of explaining the message.',
+    'Switch mostly to English when the prompt asks for communication in Spanish.',
+  ]);
+  return {
+    id: seed.id,
+    skillArea: 'oral',
+    objectiveCode: seed.objectiveCode,
+    difficulty: seed.difficulty,
+    promptLanguage: 'mixed',
+    promptText: `Multiple choice only: Which approach would make the strongest spoken Spanish response? ${seed.promptText}`,
+    choices,
+    correctAnswer: choices[0].id,
+    explanationText:
+      'A strong spoken response addresses the situation directly in Spanish, gives enough detail, uses an appropriate register, and is easy to follow.',
+    tags: [...seed.tags, 'multiple-choice-oral'],
+    estimatedSeconds: 75,
+    source: 'original_template',
     safetyReviewed: true,
   };
 }
@@ -112,36 +161,8 @@ export function buildQuestionBank(): Question[] {
 
   const languageQuestions = grammarQuestionSeeds.map((seed) => objectiveQuestionFromSeed(seed, 'language_structures', 'grammar'));
   const cultureQuestions = cultureQuestionSeeds.map((seed) => objectiveQuestionFromSeed(seed, 'culture', 'culture'));
-  const writingQuestions: Question[] = buildPromptVariants('write', writingPromptFamilies).map((seed) => ({
-    id: seed.id,
-    skillArea: 'writing',
-    objectiveCode: seed.objectiveCode,
-    difficulty: seed.difficulty,
-    promptLanguage: 'mixed',
-    promptText: seed.promptText,
-    rubric: standardRubric,
-    explanationText:
-      'Use the rubric for practice self-assessment. This local feedback is not official MTEL scoring and should be treated as study guidance only.',
-    tags: seed.tags,
-    estimatedSeconds: 420,
-    source: 'original_template',
-    safetyReviewed: true,
-  }));
-  const oralQuestions: Question[] = buildPromptVariants('oral', oralPromptFamilies).map((seed) => ({
-    id: seed.id,
-    skillArea: 'oral',
-    objectiveCode: seed.objectiveCode,
-    difficulty: seed.difficulty,
-    promptLanguage: 'mixed',
-    promptText: seed.promptText,
-    rubric: standardRubric,
-    explanationText:
-      'Use the timer, speak in Spanish, then self-assess with the rubric. No microphone audio is recorded.',
-    tags: seed.tags,
-    estimatedSeconds: 240,
-    source: 'original_template',
-    safetyReviewed: true,
-  }));
+  const writingQuestions: Question[] = buildPromptVariants('write', writingPromptFamilies).map(writingChoiceQuestion);
+  const oralQuestions: Question[] = buildPromptVariants('oral', oralPromptFamilies).map(oralChoiceQuestion);
 
   return [
     ...listeningQuestions,

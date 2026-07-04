@@ -4,7 +4,7 @@ import type { Question, SkillArea } from '../content/questionTypes';
 import { skillLabels } from '../content/questionTypes';
 import { getChicagoDateKey } from '../engine/dateChicago';
 import { selectExtraPracticeQuestions, type ExtraPracticeArea } from '../engine/dailySelector';
-import { heuristicFeedback, scoreObjective } from '../engine/scoring';
+import { scoreObjective } from '../engine/scoring';
 import { getAttempts, getDailySet, putAttempt, putExtraSession } from '../storage/db';
 import type { AttemptRecord } from '../storage/schema';
 
@@ -14,8 +14,8 @@ const areas: Array<{ value: ExtraPracticeArea; label: string }> = [
   { value: 'reading', label: 'Reading' },
   { value: 'language_structures', label: 'Language structures' },
   { value: 'culture', label: 'Culture' },
-  { value: 'writing', label: 'Writing' },
-  { value: 'oral', label: 'Oral expression' },
+  { value: 'writing', label: 'Writing strategy' },
+  { value: 'oral', label: 'Oral strategy' },
   { value: 'mixed', label: 'Mixed review' },
 ];
 
@@ -50,7 +50,7 @@ export function ExtraPracticePage(): JSX.Element {
     const question = questions[index];
     if (!question || sessionAttempts.some((attempt) => attempt.questionId === question.id)) return;
     const now = new Date().toISOString();
-    const correct = question.correctAnswer && payload.selectedChoiceId ? scoreObjective(question, payload.selectedChoiceId) : undefined;
+    const correct = scoreObjective(question, payload.selectedChoiceId);
     const attempt: AttemptRecord = {
       id: `${sessionId}-${question.id}-${Date.now()}`,
       questionId: question.id,
@@ -62,9 +62,6 @@ export function ExtraPracticePage(): JSX.Element {
       difficulty: question.difficulty,
       selectedChoiceId: payload.selectedChoiceId,
       correct,
-      responseText: payload.responseText,
-      rubricScores: payload.rubricScores,
-      heuristicFeedback: payload.responseText ? heuristicFeedback(payload.responseText) : undefined,
       elapsedSeconds: payload.elapsedSeconds,
     };
     await putAttempt(attempt);

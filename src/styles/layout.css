@@ -84,8 +84,7 @@
 }
 
 .panel-heading,
-.button-row,
-.timer-row {
+.button-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;

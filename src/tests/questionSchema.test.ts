@@ -8,6 +8,11 @@ describe('question bank schema', () => {
     expect(results.every((result) => result.success)).toBe(true);
   });
 
+  it('keeps every practice item multiple choice', () => {
+    expect(questionBank.every((question) => question.choices.length === 4 && question.correctAnswer)).toBe(true);
+    expect(questionBank.every((question) => question.choices.some((choice) => choice.id === question.correctAnswer))).toBe(true);
+  });
+
   it('meets minimum content counts', () => {
     const counts = questionBank.reduce<Record<string, number>>((accumulator, question) => {
       accumulator[question.skillArea] = (accumulator[question.skillArea] ?? 0) + 1;

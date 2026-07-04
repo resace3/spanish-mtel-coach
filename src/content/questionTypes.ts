@@ -27,8 +27,8 @@ export interface Question {
   promptText: string;
   passageText?: string;
   audioScript?: string;
-  choices?: Choice[];
-  correctAnswer?: string;
+  choices: Choice[];
+  correctAnswer: string;
   rubric?: Rubric;
   explanationText: string;
   tags: string[];

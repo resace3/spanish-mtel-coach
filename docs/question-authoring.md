@@ -12,8 +12,8 @@ Each question supports:
 - `promptText`
 - optional `passageText`
 - optional `audioScript`
-- optional four `choices`
-- optional `correctAnswer`
+- four `choices`
+- `correctAnswer`
 - optional `rubric`
 - `explanationText`
 - `tags`
@@ -21,14 +21,9 @@ Each question supports:
 - `source`
 - `safetyReviewed`
 
-Multiple-choice questions must have exactly four choices, one correct answer, and an explanation.
+Every learner-facing practice item is multiple choice. Each question must have exactly four choices, one correct answer, and an explanation.
 
-Writing and oral prompts must not have one required correct answer. They must include the four-category rubric:
-
-- task completion
-- grammar and syntax
-- vocabulary and idiom
-- organization and communicative effectiveness
+Writing and oral skill areas should be authored as multiple-choice response-strategy or judgment questions. Do not add typed free-response prompts, transcript fields, microphone recording, or self-scored rubric tasks.
 
 ## Content Standards
 

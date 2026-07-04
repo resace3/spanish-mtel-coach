@@ -49,10 +49,10 @@ The default new-learner mix is:
 6. Language structures
 7. Culture or cultural comparison
 8. Communication or classroom-oriented scenario
-9. Written expression
-10. Oral expression
+9. Written-expression strategy, multiple choice
+10. Oral-expression strategy, multiple choice
 
-Writing and oral prompts use a local practice rubric and learner self-assessment. Oral practice includes a timer and optional typed transcript field. No microphone audio is recorded.
+All practice in this app is multiple choice. Writing and oral skills are practiced through response-strategy and judgment questions, not typed free responses, microphone recording, or self-scored rubrics.
 
 ## Streaks
 
@@ -66,8 +66,8 @@ The question bank contains original Spanish MTEL-style practice content:
 - at least 40 reading items
 - at least 60 language structures items
 - at least 30 culture items
-- at least 35 writing prompts
-- at least 35 oral prompts
+- at least 35 writing-strategy multiple-choice items
+- at least 35 oral-strategy multiple-choice items
 
 It does not copy official MTEL questions or copyrighted passages. Validate content with the GitHub Actions workflow or by triggering `npm run validate:questions` in Actions.
 

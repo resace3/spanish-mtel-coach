@@ -53,23 +53,19 @@ describe('app smoke', () => {
     expect(await screen.findByText(/Correct|Review this answer/i)).toBeInTheDocument();
   });
 
-  it('accent toolbar inserts characters for constructed responses', async () => {
+  it('daily quiz uses multiple choice for the full set', async () => {
     const user = userEvent.setup();
     render(<DailyQuizPage />);
-    await screen.findByText(/Question 1 of 10/i);
-    for (let step = 0; step < 8; step += 1) {
-      const radios = screen.queryAllByRole('radio');
-      if (radios.length > 0) {
-        await user.click(radios[0]);
-      } else {
-        await user.type(screen.getByLabelText(/response|transcript/i), 'Respuesta completa con detalles.');
-      }
+    for (let step = 0; step < 10; step += 1) {
+      expect(await screen.findByText(new RegExp(`Question ${step + 1} of 10`, 'i'))).toBeInTheDocument();
+      expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+      const radios = await screen.findAllByRole('radio');
+      expect(radios).toHaveLength(4);
+      await user.click(radios[0]);
       await user.click(screen.getByRole('button', { name: /submit answer/i }));
-      await user.click(screen.getByRole('button', { name: /next/i }));
+      if (step < 9) await user.click(screen.getByRole('button', { name: /next/i }));
     }
-    expect(await screen.findByLabelText(/written response/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Insert ñ' }));
-    expect(screen.getByLabelText(/written response/i)).toHaveValue('ñ');
+    expect(await screen.findByText(/All 10 questions are submitted/i)).toBeInTheDocument();
   });
 
   it('settings export button works with mocked download', async () => {

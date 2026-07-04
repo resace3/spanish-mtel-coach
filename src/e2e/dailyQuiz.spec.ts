@@ -11,12 +11,8 @@ async function unlock(page: import('@playwright/test').Page): Promise<void> {
 
 async function answerCurrent(page: import('@playwright/test').Page): Promise<void> {
   const radios = page.getByRole('radio');
-  if ((await radios.count()) > 0) {
-    await radios.first().check();
-  } else {
-    const textArea = page.locator('textarea').first();
-    await textArea.fill('Es una respuesta de practica con detalles claros, verbos variados y una conclusion breve.');
-  }
+  await expect(radios).toHaveCount(4);
+  await radios.first().check();
   await page.getByRole('button', { name: 'Submit answer' }).click();
 }
 

@@ -28,16 +28,8 @@ export const questionSchema = z
     promptText: z.string().min(10),
     passageText: z.string().min(20).optional(),
     audioScript: z.string().min(20).optional(),
-    choices: z
-      .array(
-        z.object({
-          id: z.string().min(1),
-          text: z.string().min(1),
-        }),
-      )
-      .length(4)
-      .optional(),
-    correctAnswer: z.string().min(1).optional(),
+    choices: z.array(z.object({ id: z.string().min(1), text: z.string().min(1) })).length(4),
+    correctAnswer: z.string().min(1),
     rubric: rubricSchema.optional(),
     explanationText: z.string().min(12),
     tags: z.array(z.string().min(2)).min(1),
@@ -46,33 +38,10 @@ export const questionSchema = z
     safetyReviewed: z.literal(true),
   })
   .superRefine((question, ctx) => {
-    const hasChoices = Boolean(question.choices);
-    const hasCorrectAnswer = Boolean(question.correctAnswer);
-    if (hasChoices !== hasCorrectAnswer) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Objective questions must include both choices and correctAnswer.',
-        path: ['correctAnswer'],
-      });
-    }
-    if (question.choices && !question.choices.some((choice) => choice.id === question.correctAnswer)) {
+    if (!question.choices.some((choice) => choice.id === question.correctAnswer)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'correctAnswer must match a choice id.',
-        path: ['correctAnswer'],
-      });
-    }
-    if ((question.skillArea === 'writing' || question.skillArea === 'oral') && !question.rubric) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Writing and oral prompts require a rubric.',
-        path: ['rubric'],
-      });
-    }
-    if ((question.skillArea === 'writing' || question.skillArea === 'oral') && question.correctAnswer) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Writing and oral prompts must not require a single correct answer.',
         path: ['correctAnswer'],
       });
     }

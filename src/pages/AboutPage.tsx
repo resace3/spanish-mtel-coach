@@ -9,7 +9,8 @@ export function AboutPage(): JSX.Element {
       </p>
       <p>
         The question bank is original and designed to mimic broad task types: listening comprehension, reading comprehension, language
-        structures, linguistics, grammar, cultural perspectives, cultural comparisons, writing, and oral expression. It does not copy
+        structures, linguistics, grammar, cultural perspectives, cultural comparisons, writing strategy, and oral-response strategy.
+        All practice questions in this app are multiple choice. It does not copy
         official MTEL questions or copyrighted passages.
       </p>
       <p>

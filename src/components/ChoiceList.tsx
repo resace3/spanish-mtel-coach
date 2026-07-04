@@ -9,7 +9,7 @@ export function ChoiceList({
 }: {
   choices: Choice[];
   selected?: string;
-  correctAnswer?: string;
+  correctAnswer: string;
   submitted: boolean;
   onSelect: (choiceId: string) => void;
 }): JSX.Element {

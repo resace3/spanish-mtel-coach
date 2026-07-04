@@ -13,6 +13,7 @@ describe('dailySelector', () => {
     expect(first[2].skillArea).toBe('reading');
     expect(first[8].skillArea).toBe('writing');
     expect(first[9].skillArea).toBe('oral');
+    expect(first.every((question) => question.choices.length === 4 && question.correctAnswer)).toBe(true);
   });
 
   it('focuses extra practice on selected area and avoids today when possible', () => {

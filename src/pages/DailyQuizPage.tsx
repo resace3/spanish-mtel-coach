@@ -4,7 +4,7 @@ import { getQuestionById } from '../content/questionBank';
 import type { Question } from '../content/questionTypes';
 import { getChicagoDateKey } from '../engine/dateChicago';
 import { selectDailyQuestions } from '../engine/dailySelector';
-import { heuristicFeedback, scoreObjective } from '../engine/scoring';
+import { scoreObjective } from '../engine/scoring';
 import { buildStreakState } from '../engine/streaks';
 import {
   getAttempts,
@@ -68,7 +68,7 @@ export function DailyQuizPage(): JSX.Element {
   async function submit(payload: QuestionSubmitPayload): Promise<void> {
     if (!currentQuestion || currentAttempt || !dailySet) return;
     const now = new Date().toISOString();
-    const correct = currentQuestion.correctAnswer && payload.selectedChoiceId ? scoreObjective(currentQuestion, payload.selectedChoiceId) : undefined;
+    const correct = scoreObjective(currentQuestion, payload.selectedChoiceId);
     const attempt: AttemptRecord = {
       id: `daily-${todayKey}-${currentQuestion.id}-${Date.now()}`,
       questionId: currentQuestion.id,
@@ -81,9 +81,6 @@ export function DailyQuizPage(): JSX.Element {
       difficulty: currentQuestion.difficulty,
       selectedChoiceId: payload.selectedChoiceId,
       correct,
-      responseText: payload.responseText,
-      rubricScores: payload.rubricScores,
-      heuristicFeedback: payload.responseText ? heuristicFeedback(payload.responseText) : undefined,
       elapsedSeconds: payload.elapsedSeconds,
     };
     await putAttempt(attempt);

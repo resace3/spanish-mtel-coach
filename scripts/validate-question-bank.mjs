@@ -38,4 +38,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Validated ${questionBank.length} original Spanish MTEL-style questions and prompts.`);
+console.log(`Validated ${questionBank.length} original Spanish MTEL-style multiple-choice questions.`);

@@ -55,10 +55,9 @@ export function ReviewPage(): JSX.Element {
                 <>
                   <p>
                     <strong>Status:</strong>{' '}
-                    {attempt.correct === undefined ? 'Constructed response submitted' : attempt.correct ? 'Correct' : 'Needs review'}
+                    {attempt.correct ? 'Correct' : 'Needs review'}
                   </p>
                   {attempt.selectedChoiceId ? <p>Selected choice: {attempt.selectedChoiceId}</p> : null}
-                  {attempt.responseText ? <p className="passage">{attempt.responseText}</p> : null}
                   <p>{question.explanationText}</p>
                 </>
               ) : (

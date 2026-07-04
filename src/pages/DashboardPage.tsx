@@ -44,12 +44,6 @@ export function DashboardPage(): JSX.Element {
   const objectiveAccuracy =
     objectiveAttempts.length === 0 ? 0 : objectiveAttempts.filter((attempt) => attempt.correct).length / objectiveAttempts.length;
   const completeToday = completions.some((completion) => completion.dateKey === todayKey);
-  const rubricAttempts = attempts.filter((attempt) => attempt.rubricScores);
-  const rubricTrend =
-    rubricAttempts.length === 0
-      ? 'No self-scores yet'
-      : `${rubricAttempts.length} writing/oral self-assessments saved`;
-
   return (
     <div className="dashboard-page">
       <section className="hero-band">
@@ -126,8 +120,8 @@ export function DashboardPage(): JSX.Element {
           <StreakCalendar days={streak.last7Days} />
         </div>
         <div className="panel">
-          <h2>Writing and oral trend</h2>
-          <p>{rubricTrend}</p>
+          <h2>Multiple-choice format</h2>
+          <p>All daily and extra practice items use four answer choices. Writing and oral skills are practiced through response-strategy questions.</p>
           {!settings.lastExportAt ? (
             <p className="backup-reminder">No backup export has been recorded yet. Export progress from Settings before changing browsers or devices.</p>
           ) : (
