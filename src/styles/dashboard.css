@@ -8,7 +8,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: 1rem;
-  min-height: 23rem;
+  min-height: 18rem;
   border-radius: 8px;
   padding: 2rem;
   color: #173230;
@@ -25,6 +25,39 @@
 
 .hero-cta {
   white-space: nowrap;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.quick-action-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 4.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem;
+  color: var(--accentStrong);
+  background: rgb(255 253 248 / 94%);
+  box-shadow: 0 8px 20px rgb(39 52 46 / 9%);
+  text-decoration: none;
+}
+
+.quick-action-card span {
+  display: grid;
+  min-width: 0;
+}
+
+.quick-action-card strong {
+  line-height: 1.1;
+}
+
+.quick-action-card small {
+  color: var(--muted);
 }
 
 .stat-grid {
@@ -169,6 +202,7 @@
 
 @media (max-width: 900px) {
   .hero-band,
+  .quick-actions,
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -179,9 +213,59 @@
 }
 
 @media (max-width: 540px) {
-  .stat-grid,
+  .hero-band {
+    min-height: auto;
+    padding: 1.15rem;
+  }
+
+  .hero-band p {
+    margin-bottom: 0;
+  }
+
+  .quick-actions {
+    gap: 0.55rem;
+  }
+
+  .quick-action-card {
+    min-height: 3.75rem;
+    padding: 0.75rem;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .stat-card {
+    padding: 0.8rem;
+  }
+
+  .stat-card-top {
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+  }
+
+  .stat-card strong {
+    font-size: 1.55rem;
+  }
+
+  .stat-card p {
+    font-size: 0.85rem;
+  }
+
   .streak-calendar {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+
+  .day-dot {
+    min-height: 3.2rem;
+    padding: 0.2rem;
+  }
+
+  .day-dot small {
+    font-size: 0.68rem;
   }
 
   .weak-row {

@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Flame, Target } from 'lucide-react';
+import { ArrowRight, BookOpen, Download, Dumbbell, Flame, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ProgressRing } from '../components/ProgressRing';
 import { StatCard } from '../components/StatCard';
@@ -54,11 +54,9 @@ export function DashboardPage(): JSX.Element {
     <div className="dashboard-page">
       <section className="hero-band">
         <div>
-          <p className="eyebrow">America/Chicago daily practice</p>
+          <p className="eyebrow">Daily Spanish MTEL practice</p>
           <h1>Spanish MTEL Coach</h1>
-          <p>
-            Original MTEL-style Spanish practice with local progress, adaptive weak-area review, and no server-side learner storage.
-          </p>
+          <p>Do one 10-question set today. Your progress stays on this device.</p>
         </div>
         <Link className="primary-button hero-cta" to="/daily">
           <span>{completeToday ? 'Review today' : "Start today's 10"}</span>
@@ -66,9 +64,33 @@ export function DashboardPage(): JSX.Element {
         </Link>
       </section>
 
+      <section className="quick-actions" aria-label="Quick actions">
+        <Link className="quick-action-card" to="/daily">
+          <Flame size={19} />
+          <span>
+            <strong>Daily 10</strong>
+            <small>{completeToday ? 'Completed today' : 'Best next step'}</small>
+          </span>
+        </Link>
+        <Link className="quick-action-card" to="/practice">
+          <Dumbbell size={19} />
+          <span>
+            <strong>Practice</strong>
+            <small>Focus weak areas</small>
+          </span>
+        </Link>
+        <Link className="quick-action-card" to="/settings">
+          <Download size={19} />
+          <span>
+            <strong>Backup</strong>
+            <small>Export progress</small>
+          </span>
+        </Link>
+      </section>
+
       <section className="stat-grid">
-        <StatCard label="Current streak" value={streak.currentStreak} detail="Daily sets completed in a row" icon={<Flame size={18} />} />
-        <StatCard label="Longest streak" value={streak.longestStreak} detail="Best run preserved after missed days" />
+        <StatCard label="Current streak" value={streak.currentStreak} detail="Daily sets in a row" icon={<Flame size={18} />} />
+        <StatCard label="Longest streak" value={streak.longestStreak} detail="Best run" />
         <StatCard label="Today" value={completeToday ? 'Complete' : `${todaySet?.submittedQuestionIds.length ?? 0}/10`} detail={todayKey} />
         <StatCard label="Questions answered" value={attempts.length} detail="Daily and extra practice combined" icon={<BookOpen size={18} />} />
       </section>

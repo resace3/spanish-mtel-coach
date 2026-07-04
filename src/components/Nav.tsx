@@ -1,4 +1,4 @@
-import { CalendarCheck, Dumbbell, History, Home, Info, Lock, Settings } from 'lucide-react';
+import { CalendarCheck, Dumbbell, History, Home, Lock, Settings } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 export function Nav({ onLock }: { onLock: () => void }): JSX.Element {
@@ -8,7 +8,6 @@ export function Nav({ onLock }: { onLock: () => void }): JSX.Element {
     { to: '/practice', label: 'Practice', icon: Dumbbell },
     { to: '/review', label: 'Review', icon: History },
     { to: '/settings', label: 'Settings', icon: Settings },
-    { to: '/about', label: 'About', icon: Info },
   ];
   return (
     <nav className="nav-shell" aria-label="Primary">
