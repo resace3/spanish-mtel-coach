@@ -37,7 +37,7 @@ jobs:
         run: npm audit --audit-level=moderate
       - name: Upload failure artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ci-failure-artifacts
           path: |
