@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import { DailyQuizPage } from '../pages/DailyQuizPage';
 import { SettingsPage } from '../pages/SettingsPage';
@@ -44,7 +45,11 @@ describe('app smoke', () => {
 
   it('daily quiz shows one question at a time and reveals explanations after submit', async () => {
     const user = userEvent.setup();
-    render(<DailyQuizPage />);
+    render(
+      <MemoryRouter>
+        <DailyQuizPage />
+      </MemoryRouter>,
+    );
     expect(await screen.findByText(/Question 1 of 10/i)).toBeInTheDocument();
     expect(screen.queryByText(/Correct|Review this answer/i)).not.toBeInTheDocument();
     const radios = await screen.findAllByRole('radio');
@@ -55,7 +60,11 @@ describe('app smoke', () => {
 
   it('daily quiz uses multiple choice for the full set', async () => {
     const user = userEvent.setup();
-    render(<DailyQuizPage />);
+    render(
+      <MemoryRouter>
+        <DailyQuizPage />
+      </MemoryRouter>,
+    );
     for (let step = 0; step < 10; step += 1) {
       expect(await screen.findByText(new RegExp(`Question ${step + 1} of 10`, 'i'))).toBeInTheDocument();
       expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
