@@ -4,7 +4,7 @@ const passcode = process.env.PLAYWRIGHT_PASSCODE ?? 'test-passcode-for-ci-only';
 
 async function unlock(page: import('@playwright/test').Page): Promise<void> {
   await page.goto('/spanish-mtel-coach/');
-  await page.getByLabel('Passcode').fill(passcode);
+  await page.locator('input#passcode').fill(passcode);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page.getByText('Current streak')).toBeVisible();
 }

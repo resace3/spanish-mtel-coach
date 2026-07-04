@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('extra practice starts without completing the daily set', async ({ page }) => {
   await page.goto('/spanish-mtel-coach/');
-  await page.getByLabel('Passcode').fill(process.env.PLAYWRIGHT_PASSCODE ?? 'test-passcode-for-ci-only');
+  await page.locator('input#passcode').fill(process.env.PLAYWRIGHT_PASSCODE ?? 'test-passcode-for-ci-only');
   await page.getByRole('button', { name: 'Unlock' }).click();
   await page.getByRole('link', { name: 'Practice' }).click();
   await page.getByLabel('Question count').selectOption('5');
