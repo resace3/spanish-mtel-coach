@@ -20,13 +20,17 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-function base64ToBytes(value: string): Uint8Array {
+function base64ToBytes(value: string): Uint8Array<ArrayBuffer> {
   const binary = atob(value);
-  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+  return bytes;
 }
 
-async function deriveBackupKey(passphrase: string, salt: Uint8Array, iterations: number): Promise<CryptoKey> {
-  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+async function deriveBackupKey(passphrase: string, salt: Uint8Array<ArrayBuffer>, iterations: number): Promise<CryptoKey> {
+  const material = await crypto.subtle.importKey('raw', new Uint8Array(new TextEncoder().encode(passphrase)), 'PBKDF2', false, [
+    'deriveKey',
+  ]);
   return crypto.subtle.deriveKey(
     { name: 'PBKDF2', hash: 'SHA-256', salt, iterations },
     material,
@@ -47,11 +51,13 @@ export async function exportProgress(passphrase?: string): Promise<string> {
   await putSettings({ ...(data.settings ?? { id: 'settings' }), lastExportAt: new Date().toISOString() });
   if (!passphrase) return json;
 
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const salt = new Uint8Array(16);
+  const iv = new Uint8Array(12);
+  crypto.getRandomValues(salt);
+  crypto.getRandomValues(iv);
   const iterations = 210000;
   const key = await deriveBackupKey(passphrase, salt, iterations);
-  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(json));
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new Uint8Array(new TextEncoder().encode(json)));
   const payload: EncryptedExport = {
     encrypted: true,
     version: 1,
