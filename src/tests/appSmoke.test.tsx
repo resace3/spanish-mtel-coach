@@ -18,9 +18,10 @@ describe('app smoke', () => {
   it('blocks the app behind the passcode gate and unlocks with the test passcode', async () => {
     const user = userEvent.setup();
     render(<App />);
-    expect(screen.getByLabelText(/passcode/i)).toBeInTheDocument();
+    const passcodeInput = screen.getByLabelText('Passcode', { selector: 'input' });
+    expect(passcodeInput).toBeInTheDocument();
     expect(screen.queryByText(/current streak/i)).not.toBeInTheDocument();
-    await user.type(screen.getByLabelText(/passcode/i), 'test-passcode-for-ci-only');
+    await user.type(passcodeInput, 'test-passcode-for-ci-only');
     await user.click(screen.getByRole('button', { name: /unlock/i }));
     expect(await screen.findByText(/current streak/i)).toBeInTheDocument();
   });
@@ -28,7 +29,7 @@ describe('app smoke', () => {
   it('keeps incorrect passcodes locked', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.type(screen.getByLabelText(/passcode/i), 'wrong');
+    await user.type(screen.getByLabelText('Passcode', { selector: 'input' }), 'wrong');
     await user.click(screen.getByRole('button', { name: /unlock/i }));
     expect(await screen.findByText(/did not unlock/i)).toBeInTheDocument();
   });
@@ -36,7 +37,7 @@ describe('app smoke', () => {
   it('renders an empty dashboard state after unlock', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.type(screen.getByLabelText(/passcode/i), 'test-passcode-for-ci-only');
+    await user.type(screen.getByLabelText('Passcode', { selector: 'input' }), 'test-passcode-for-ci-only');
     await user.click(screen.getByRole('button', { name: /unlock/i }));
     expect(await screen.findByText(/weak-area adaptation starts/i)).toBeInTheDocument();
   });
