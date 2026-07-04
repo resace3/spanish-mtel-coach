@@ -237,7 +237,7 @@ textarea {
   }
 
   .page-shell {
-    padding: 1rem 1rem calc(5.4rem + env(safe-area-inset-bottom));
+    padding: 1rem 1rem calc(7rem + env(safe-area-inset-bottom));
   }
 
   .panel,
