@@ -28,5 +28,6 @@ test('complete a 100-question MTEL mock test and show a score result', async ({ 
 
   await expect(page.getByText(/Score:\s*\d+\/100/)).toBeVisible();
   await expect(page.getByText(/Mock pass (achieved|not reached)/i)).toBeVisible();
-  await expect(page.getByRole('link', { name: /Review weak areas|Review daily practice history/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Review weak areas in practice' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Review daily practice history' })).toBeVisible();
 });
