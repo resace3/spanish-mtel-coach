@@ -5,6 +5,7 @@ import { DailyQuizPage } from './pages/DailyQuizPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExtraPracticePage } from './pages/ExtraPracticePage';
 import { ReviewPage } from './pages/ReviewPage';
+import { FullTestPage } from './pages/FullTestPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 export function AppRoutes({ onLock }: { onLock: () => void }): JSX.Element {
@@ -13,6 +14,7 @@ export function AppRoutes({ onLock }: { onLock: () => void }): JSX.Element {
       <Route element={<Layout onLock={onLock} />}>
         <Route index element={<DashboardPage />} />
         <Route path="daily" element={<DailyQuizPage />} />
+        <Route path="mock" element={<FullTestPage />} />
         <Route path="practice" element={<ExtraPracticePage />} />
         <Route path="review" element={<ReviewPage />} />
         <Route path="settings" element={<SettingsPage onLock={onLock} />} />

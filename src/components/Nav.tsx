@@ -1,10 +1,11 @@
-import { CalendarCheck, Dumbbell, History, Home, Lock, Settings } from 'lucide-react';
+import { CalendarCheck, Dumbbell, FileText, History, Home, Lock, Settings } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 export function Nav({ onLock }: { onLock: () => void }): JSX.Element {
   const links = [
     { to: '/', label: 'Dashboard', icon: Home },
     { to: '/daily', label: 'Daily', icon: CalendarCheck },
+    { to: '/mock', label: 'MTEL Mock', icon: FileText },
     { to: '/practice', label: 'Practice', icon: Dumbbell },
     { to: '/review', label: 'Review', icon: History },
     { to: '/settings', label: 'Settings', icon: Settings },

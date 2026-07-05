@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectDailyQuestions, selectExtraPracticeQuestions } from '../engine/dailySelector';
+import { selectDailyQuestions, selectExtraPracticeQuestions, selectMockTestQuestions } from '../engine/dailySelector';
 import type { AttemptRecord } from '../storage/schema';
 
 describe('dailySelector', () => {
@@ -39,5 +39,13 @@ describe('dailySelector', () => {
     ];
     const selected = selectExtraPracticeQuestions('weakest', 5, attempts);
     expect(selected[0].id).toBe('listen-school-conference-main');
+  });
+
+  it('builds a deterministic 100-question mock test from the bank', () => {
+    const first = selectMockTestQuestions({ questionCount: 100, seed: 'mtest:deterministic' });
+    const second = selectMockTestQuestions({ questionCount: 100, seed: 'mtest:deterministic' });
+    expect(first).toHaveLength(100);
+    expect(new Set(first.map((question) => question.id)).size).toBe(100);
+    expect(first.map((question) => question.id)).toEqual(second.map((question) => question.id));
   });
 });

@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Download, Dumbbell, Flame, Target } from 'lucide-react';
+import { ArrowRight, BookOpen, Download, Dumbbell, FileText, Flame, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ProgressRing } from '../components/ProgressRing';
 import { StatCard } from '../components/StatCard';
@@ -66,6 +66,13 @@ export function DashboardPage(): JSX.Element {
             <small>{completeToday ? 'Completed today' : 'Best next step'}</small>
           </span>
         </Link>
+        <Link className="quick-action-card" to="/mock">
+          <FileText size={19} />
+          <span>
+            <strong>Full MTEL mock</strong>
+            <small>100 mixed multiple-choice questions</small>
+          </span>
+        </Link>
         <Link className="quick-action-card" to="/practice">
           <Dumbbell size={19} />
           <span>
@@ -86,7 +93,7 @@ export function DashboardPage(): JSX.Element {
         <StatCard label="Current streak" value={streak.currentStreak} detail="Daily sets in a row" icon={<Flame size={18} />} />
         <StatCard label="Longest streak" value={streak.longestStreak} detail="Best run" />
         <StatCard label="Today" value={completeToday ? 'Complete' : `${todaySet?.submittedQuestionIds.length ?? 0}/10`} detail={todayKey} />
-        <StatCard label="Questions answered" value={attempts.length} detail="Daily and extra practice combined" icon={<BookOpen size={18} />} />
+        <StatCard label="Questions answered" value={attempts.length} detail="All practice attempts" icon={<BookOpen size={18} />} />
       </section>
 
       <section className="dashboard-grid">

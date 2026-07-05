@@ -14,7 +14,7 @@ export interface AttemptRecord {
   questionId: string;
   dateKey: string;
   attemptedAt: string;
-  sessionType: 'daily' | 'extra';
+  sessionType: 'daily' | 'extra' | 'mock';
   dailyDateKey?: string;
   skillArea: SkillArea;
   objectiveCode: string;
@@ -80,7 +80,7 @@ export const attemptRecordSchema = z.object({
   questionId: z.string(),
   dateKey: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   attemptedAt: z.string(),
-  sessionType: z.enum(['daily', 'extra']),
+  sessionType: z.enum(['daily', 'extra', 'mock']),
   dailyDateKey: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   skillArea: skillAreaSchema,
   objectiveCode: z.string(),

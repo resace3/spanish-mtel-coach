@@ -12,6 +12,11 @@ export interface DailySelectionInput {
   existingTodayIds?: string[];
 }
 
+export interface MockTestSelectionInput {
+  questionCount?: number;
+  seed?: string;
+}
+
 function profileSeed(attempts: AttemptRecord[]): string {
   const signature = attempts
     .slice(-80)
@@ -156,4 +161,16 @@ export function selectExtraPracticeQuestions(
   }
 
   return picked;
+}
+
+export function selectMockTestQuestions({
+  questionCount = 100,
+  seed = 'spanish-mtel-mock-test',
+}: MockTestSelectionInput = {}): Question[] {
+  if (questionCount <= 0) throw new Error('Mock test must request at least one question.');
+  const randomized = shuffleStable(questionBank, seed);
+  if (randomized.length < questionCount) {
+    throw new Error(`Not enough questions to build a ${questionCount}-item mock test.`);
+  }
+  return randomized.slice(0, questionCount);
 }

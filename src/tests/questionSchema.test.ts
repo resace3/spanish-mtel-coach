@@ -13,6 +13,11 @@ describe('question bank schema', () => {
     expect(questionBank.every((question) => question.choices.some((choice) => choice.id === question.correctAnswer))).toBe(true);
   });
 
+  it('does not use the same correct option position for all items', () => {
+    const uniqueCorrectKeys = new Set(questionBank.map((question) => question.correctAnswer));
+    expect(uniqueCorrectKeys.size).toBeGreaterThan(1);
+  });
+
   it('meets minimum content counts', () => {
     const counts = questionBank.reduce<Record<string, number>>((accumulator, question) => {
       accumulator[question.skillArea] = (accumulator[question.skillArea] ?? 0) + 1;

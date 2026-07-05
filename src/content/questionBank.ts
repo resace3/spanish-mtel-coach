@@ -6,6 +6,26 @@ import type { Choice, Question, SkillArea } from './questionTypes';
 import { readingPassageSeeds } from './readingPassages';
 import { writingPromptFamilies } from './writingPrompts';
 import { buildPromptVariants, type GeneratedPromptSeed } from '../engine/templateGenerator';
+import { hashString } from '../engine/prng';
+
+function rebalanceCorrectAnswer(question: Question): Question {
+  const correctIndex = question.choices.findIndex((choice) => choice.id === question.correctAnswer);
+  if (correctIndex < 0) return question;
+
+  const orderSeed = hashString(question.id);
+  const rotateBy = (orderSeed % (question.choices.length - 1)) + 1;
+  const reordered = [...question.choices.slice(rotateBy), ...question.choices.slice(0, rotateBy)].map((choice, index) => ({
+    id: String.fromCharCode(65 + index),
+    text: choice.text,
+  }));
+
+  const newCorrectIndex = reordered.findIndex((choice) => choice.text === question.choices[correctIndex].text);
+  return {
+    ...question,
+    choices: reordered,
+    correctAnswer: newCorrectIndex >= 0 ? String.fromCharCode(65 + newCorrectIndex) : reordered[0].id,
+  };
+}
 
 function choicesFrom(labels: string[]): Choice[] {
   return labels.map((text, index) => ({ id: String.fromCharCode(65 + index), text }));
@@ -164,7 +184,7 @@ export function buildQuestionBank(): Question[] {
   const writingQuestions: Question[] = buildPromptVariants('write', writingPromptFamilies).map(writingChoiceQuestion);
   const oralQuestions: Question[] = buildPromptVariants('oral', oralPromptFamilies).map(oralChoiceQuestion);
 
-  return [
+  const assembled = [
     ...listeningQuestions,
     ...readingQuestions,
     ...languageQuestions,
@@ -172,6 +192,8 @@ export function buildQuestionBank(): Question[] {
     ...writingQuestions,
     ...oralQuestions,
   ];
+
+  return assembled.map(rebalanceCorrectAnswer);
 }
 
 export const questionBank = buildQuestionBank();
